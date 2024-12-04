@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Add User</title>
+    <style>
+        .input-box {
+            width: 300px; 
+        }
+        .boxes {
+            margin: 20px;
+        }
+        #AddUser {
+            width: 90px;
+            height: 30px;
+        }
+        #AddUser:hover {
+            background-color: rgb(38, 38, 190);
+            color: white;
+        }
+        .All-BTN, .Add-BTN, .Task-BTN {
+            background-color: white;
+            border: none;
+            width: 80px;
+            height: 60px;
+            font-size: 15px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .All-BTN:hover, .Add-BTN:hover, .Task-BTN:hover {
+            background-color: blue;
+            color: white;
+        }
+        #header {
+            position: relative;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border-bottom: 1px solid gray;
+            z-index: 1000; 
+        }
+        .User-data {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            width: 300px;
+        }
+        .User-data img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img src="Crudify.png" alt="Crudify Logo">
+        <input type="button" value="All User" class="All-BTN"/>
+        <input type="button" value="Add User" class="Add-BTN">
+        <input type="button" value="My Task" class="Task-BTN">
+        <button style="display: flex ; color: white; background-color: red ;margin-left: 55%
+        ;" class="Logout-BTN">Logout &nbsp;<i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div style="display: flex; justify-content: center; font-size: 35px;">
+        <h5>Add User  <i class="fa-solid fa-user-plus"></i></h5>
+    </div>
+    <div style="background-color: rgb(34, 32, 32); height: 320px; display: flex; justify-content: space-around;">
+        <form id="userForm" style="display: flex; flex-wrap: wrap; width: 1200px; justify-content: space-around;">
+            <div class="boxes">
+                <label style="color: white;">Image URL:</label><br/>
+                <input type="url" placeholder="Image URL" class="input-box" id="imageUrl" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">First Name:</label><br/>
+                <input type="text" placeholder="First Name" class="input-box" id="firstName" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Last Name:</label><br/>
+                <input type="text" placeholder="Last Name" class="input-box" id="lastName" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Phone Number:</label><br/>
+                <input type="number" placeholder="Phone Number" class="input-box" id="phoneNumber" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Email:</label><br/>
+                <input type='email' placeholder="Email" class="input-box" id="email" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Address:</label><br/>
+                <input type="text" placeholder="Address" class="input-box" id="address" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Date of Birth:</label><br/>
+                <input type="date" class="input-box" id="dateOfBirth" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Age:</label><br/>
+                <input type="number" placeholder="Age" class="input-box" id="age" required />
+            </div>
+            <div class="boxes">
+                <label style="color: white;">Gender:</label><br/>
+                <select class="input-box" id="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="alertBox"  style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background-color: white; border: 1px solid gray; padding: 20px; z-index: 1001; box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    width: 500px;">
+        <p style="color: blue;">Please fill all fields.</p>
+    </div>
+    <div class="UserAdded"  style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background-color: white; border: 1px solid gray; padding: 20px; z-index: 1001; box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    width: 500px;">
+        <p style="color: blue;">User added successfully.</p>
+    </div>
+    <div style="background-color: rgb(34, 32, 32); height: 50px; display: flex; justify-content: center; align-items: center;">
+        <input type="button" value="Add User" id="AddUser">
+    </div>
+    <div id="user-container" style="display: flex; flex-wrap: wrap; justify-content: space-around; margin: 20px;">
+        <!-- User data will be appended here -->
+    </div>
+
+    <script>
+        document.getElementById('AddUser').onclick = function() {
+            // Collect input values
+            const userData = {
+                imageUrl: document.getElementById('imageUrl').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value
+            };
+
+            // Check if any input field is empty
+            const allFieldsFilled = Object.values(userData).every(value => value !== '');
+            if (!allFieldsFilled) {
+                const showBox = document.querySelector('.alertBox');
+                showBox.style.display = 'block';
+                setTimeout(() => {
+                    showBox.style.display = 'none';
+                }, 2000);
+                return;
+            }
+
+            // POST request to add user
+            fetch('https://dummyjson.com/users/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                const add = document.querySelector('.UserAdded');
+                add.style.display = 'block';
+                setTimeout(() => {
+                    add.style.display = 'none';
+                }, 2000);
+                // Optionally reset the form here
+                document.getElementById('userForm').reset();
+                // Update the user display on the main page
+                updateUserDisplay(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error adding user!');
+            });
+        }
+        function updateUserDisplay(user) {
+            const userContainer = document.getElementById('user-container');
+            const userBox = document.createElement('div');
+            userBox.className = 'User-data';
+            userBox.innerHTML = `
+                <img src="${user.imageUrl}" alt="User Image" />
+                <div class="User-info">
+                    <p><strong>Name:</strong> ${user.firstName} ${user.lastName}</p>
+                    <p><strong>Phone:</strong> ${user.phoneNumber}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Address:</strong> ${user.address}</p>
+                    <p><strong>Date of Birth:</strong> ${user.dateOfBirth}</p>
+                    <p><strong>Age:</strong> ${user.age}</p>
+                    <p><strong>Gender:</strong> ${user.gender}</p>
+                </div>
+            `;
+            userContainer.appendChild(userBox);
+        }
+
+        document.querySelector('.All-BTN').onclick = function() {
+            window.location.href = 'http://127.0.0.1:5500/fetchAPI.html';
+        }
+
+        document.querySelector('.Task-BTN').onclick = function() {
+            window.location.href = 'http://127.0.0.1:5500/Task.html';
+        }
+
+        document.querySelector('.Logout-BTN').onclick = function(){
+            window.location.href = 'http://127.0.0.1:5500/Login.html'
+        }
+    </script>
+</body>
+</html>

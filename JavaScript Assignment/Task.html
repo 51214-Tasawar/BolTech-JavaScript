@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Task Manager</title>
+    <style>
+        #TaskInput {
+            width: 200px;
+            height: 25px;
+        }
+        #TaskButton {
+            width: 35px;
+            height: 35px;
+            color: white;
+            background-color: blue;
+            font-weight: bold;
+            font-size: 20px;
+            border: solid;
+            border-collapse: collapse;
+            cursor: pointer;
+        }
+        .All-BTN,.Add-BTN,.Task-BTN {
+            background-color: white;
+            border: none;
+            width: 80px;
+            height: 60px;
+            font-size: 15px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .All-BTN:hover, .Add-BTN:hover, .Task-BTN:hover {
+            background-color: blue;
+            color: white;
+        }
+        #header {
+            position: relative;
+            top: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border-bottom: 1px solid gray;
+            z-index: 1000; 
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .task-text {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        .toggle-btn, .delete-btn {
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 20px;
+            margin: 0 5px;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .delete-btn {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img src="Crudify.png" alt="Crudify Logo">
+        <input type="button" value="All User" class="All-BTN"/>
+        <input type="button" value="Add User" class="Add-BTN">
+        <input type="button" value="My Task" class="Task-BTN">
+        <button style="display: flex ; color: white; background-color: red ;margin-left: 55%
+        ;" class="Logout-BTN">Logout &nbsp;<i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+        <div style="font-size: 30px;">
+            <h4>My Todo &nbsp; <i class="fa-solid fa-clipboard-list"></i></h4>
+            <input type="text" placeholder="Enter Here..." id="TaskInput" />
+            <input type="button" value="+" id="TaskButton" />
+            <div id="taskList" style="margin-top: 20px; text-align: center; font-size: 20px;">
+                <!-- Tasks will be appended here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('TaskButton').onclick = function() {
+            var taskValue = document.getElementById('TaskInput').value;
+
+            if (taskValue.trim() !== '') {  
+                var taskList = document.getElementById('taskList');
+
+                var taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+
+                var taskText = document.createElement('span');
+                taskText.className = 'task-text';
+                taskText.textContent = taskValue;
+
+                var toggleBtn = document.createElement('button');
+                toggleBtn.className = 'toggle-btn';
+                toggleBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                toggleBtn.onclick = function() {
+                    taskText.classList.toggle('completed');
+                };
+
+                var deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                deleteBtn.onclick = function() {
+                    taskList.removeChild(taskItem);
+                };
+
+                taskItem.appendChild(taskText);
+                taskItem.appendChild(toggleBtn);
+                taskItem.appendChild(deleteBtn);
+
+                taskList.appendChild(taskItem);
+
+                document.getElementById('TaskInput').value = ''; 
+            } else {
+                alert('Please enter a task');
+            }
+        }
+
+        document.querySelector('.Add-BTN').onclick = function(){
+            window.location.href='http://127.0.0.1:5500/AddUser.html';
+        }
+        document.querySelector('.All-BTN').onclick = function(){
+            window.location.href ='http://127.0.0.1:5500/fetchAPI.html';
+        }
+        document.querySelector('.Logout-BTN').onclick = function(){
+            window.location.href = 'http://127.0.0.1:5500/Login.html'
+        }
+    </script>
+</body>
+</html>

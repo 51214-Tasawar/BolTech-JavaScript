@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>User Management</title>
+    <style>
+        .All-BTN, .Add-BTN, .Task-BTN {
+            background-color: white;
+            border: none;
+            width: 80px;
+            height: 60px;
+            font-size: 15px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .All-BTN:hover, .Add-BTN:hover, .Task-BTN:hover {
+            background-color: blue;
+            color: white;
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            width: 99%;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-bottom: 1px solid gray;
+            z-index: 1000;
+        }
+
+        img {
+            height: 40px;
+            margin-right: 20px;
+        }
+
+        #content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        #Parent-Div {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #Member {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .User-data {
+            width: 330px;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid lightblue;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .User-data img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .User-info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .User-info p {
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        #user-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 70px;
+        }
+
+        .SaveBox, .DeletealretBox {
+            width: 400px;
+            height: 200px;
+            color: blue;
+            background-color: lightblue;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .AddUserForm {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .AddUserForm input, .AddUserForm select {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+
+        .AddUserForm button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background-color: blue;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .AddUserForm button:hover {
+            background-color: darkblue;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img src="Crudify.png" alt="Crudify Logo">
+        <input type="button" value="All User" class="All-BTN" onclick="showAllUsers()">
+        <input type="button" value="Add User" class="Add-BTN" onclick="showAddUser()">
+        <input type="button" value="My Task" class="Task-BTN">
+        <button class="Logout-BTN" onclick="logout()" style="display: flex; color: white; background-color: red; margin-left: 55%;">Logout &nbsp;<i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+
+    <input type="text" id="searchEmail" placeholder="Search by email" style="margin-left: 20px; padding: 5px; border: 1px solid gray;">
+
+    <div id="Parent-Div">
+        <div id="allUsers">
+            <div id="user-container">
+                <!-- User info boxes will be appended here by JavaScript -->
+            </div>
+        </div>
+        <div id="addUser" style="display:none;">
+            <h2>Add User</h2>
+            <form id="addUserForm" class="AddUserForm">
+                <label>Image URL:</label>
+                <input type="text" id="addImage" placeholder="Image URL">
+                <label>First Name:</label>
+                <input type="text" id="addFirstName" placeholder="First Name">
+                <label>Last Name:</label>
+                <input type="text" id="addLastName" placeholder="Last Name">
+                <label>Phone:</label>
+                <input type="text" id="addPhone" placeholder="Phone">
+                <label>Email:</label>
+                <input type="text" id="addEmail" placeholder="Email">
+                <label>Address:</label>
+                <input type="text" id="addAddress" placeholder="Address">
+                <label>Birth Date:</label>
+                <input type="text" id="addBirthDate" placeholder="Birth Date">
+                <label>Gender:</label>
+                <select id="addGender">
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+                <label>Age:</label>
+                <input type="text" id="addAge" placeholder="Age">
+                <button type="button" id="saveUser">Add User</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="customEditBox" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background-color: white; border: 1px solid gray; padding: 20px; z-index: 1001; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+        width: 1200px;">
+        <h3>Edit User</h3>
+        <form id="editForm">
+            <div style="display: flex; justify-content: space-evenly;">
+                <label>Image URL: <input type="text" id="editImage"></label>
+                <label>First Name: <input type="text" id="editFirstName"></label>
+                <label>Last Name: <input type="text" id="editLastName"></label>
+            </div><br/>
+            <div style="display: flex; justify-content: space-evenly;">
+                <label style="margin-left: 15px;">Phone :&nbsp;&nbsp;<input type="text" id="editPhone"></label>
+                <label style="margin-left: 20px;">Email:&nbsp;&nbsp;<input type="text" id="editEmail"></label>
+                <label style="margin-left: 20px;">Address: <input type="text" id="editAddress"></label>
+            </div><br/>
+            <div style="display: flex; justify-content: space-evenly;">
+                <label>Birth Date: <input type="text" id="editBirthDate"></label>
+                <label>Gender: 
+                    <select id="editGender" style="width: 170px;">
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </label>
+                <label style="margin-left: 30px;">Age: <input type="text" id="editAge"></label>
+            </div><br/>
+            <button type="button" id="saveEdit" style="color: white; background-color: blue; border: 1px solid blue; border-collapse: collapse; width: 100px; height: 30px; font-weight: bold;">Save</button>
+            <button type="button" id="cancelEdit" style="color: white; background-color: red; border: 1px solid red; border-collapse: collapse; width: 100px; height: 30px; font-weight: bold;">Cancel</button>
+        </form>
+    </div>
+
+    <div class="SaveBox" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background-color: white; border: 1px solid gray; padding: 20px; z-index: 1001; box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+        width: 500px;">
+        <p>Changes Saved</p>
+    </div>
+
+    <div id="customConfirmBox" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background-color: white; border: 1px solid gray; padding: 20px; z-index: 1001; box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+        width: 500px;">
+        <p>Are you sure you want to delete this user?</p>
+        <button id="confirmDelete" style="color: white; background-color: red; border: 1px solid red; border-radius: 5px;">Confirm</button>
+        <button id="cancelDelete" style="color: white; background-color: gray; border: 1px solid gray; border-radius: 5px;">Cancel</button>
+    </div>
+
+    <div class="DeletealretBox" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background-color: white; border: 1px solid gray; padding: 20px; z-index: 1001; box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+        width: 500px;">
+        <p>Deleted Successfully</p>
+    </div>
+
+    <script>
+        // Function to show the "All User" section
+        function showAllUsers() {
+            document.getElementById('allUsers').style.display = 'block';
+            document.getElementById('addUser').style.display = 'none';
+            fetchUsers();
+        }
+
+        // Function to show the "Add User" section
+        function showAddUser() {
+            document.getElementById('allUsers').style.display = 'none';
+            document.getElementById('addUser').style.display = 'block';
+        }
+
+        // Function to fetch users and populate the user container
+        function fetchUsers() {
+            fetch('https://dummyjson.com/users')
+                .then(res => res.json())
+                .then(data => {
+                    const users = data.users;
+                    const userContainer = document.getElementById('user-container');
+                    userContainer.innerHTML = ''; // Clear existing users
+
+                    users.forEach(user => {
+                        const Item = document.createElement('div');
+                        Item.classList.add('User-data');
+                        Item.dataset.userId = user.id;
+                        Item.innerHTML = `
+                            <div class="User-info">
+                                <img src="${user.image}" alt="User Image"/>
+                                <p class="user-phone" style="display:flex; justify-content: right;"> ${user.phone}<button style="color:white;background-color:blue; border:1px solid; border-radius:5px;margin-left:10px"><i class="fa fa-phone"></i></button></p> 
+                                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                    <p class="user-name">${user.firstName} ${user.lastName}</p>  
+                                </div>
+                                <p class="user-email">${user.email}</p>
+                                <p class="user-address">${user.address.address}</p>
+                                <p class="user-birthDate">${user.birthDate}</p>
+                                <p class="user-gender">Gender: ${user.gender}</p>
+                                <p class="user-age">Age: ${user.age}</p>
+                                <button onclick="openEditBox(${user.id})" style="color:white;background-color:blue; border-radius:5px; width:65px; height:30px">Edit</button>
+                                <button onclick="openConfirmBox(${user.id})" style="color:brown;border:1px solid; border-radius:5px ; width:65px; height:30px">Delete</button>
+                            </div>
+                        `;
+                        userContainer.appendChild(Item);
+                    });
+                });
+        }
+
+        // Function to handle adding a new user
+        document.getElementById('saveUser').onclick = function() {
+            const newUser = {
+                image: document.getElementById('addImage').value,
+                firstName: document.getElementById('addFirstName').value,
+                lastName: document.getElementById('addLastName').value,
+                phone: document.getElementById('addPhone').value,
+                email: document.getElementById('addEmail').value,
+                address: {
+                    address: document.getElementById('addAddress').value
+                },
+                birthDate: document.getElementById('addBirthDate').value,
+                gender: document.getElementById('addGender').value,
+                age: document.getElementById('addAge').value
+            };
+
+            fetch('https://dummyjson.com/users/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Show success message
+                const Box = document.getElementsByClassName('SaveBox')[0];
+                if (Box) {
+                    Box.style.display = 'block';
+                    setTimeout(() => {
+                        Box.style.display = 'none';
+                    }, 2000);
+                }
+
+                // Clear form fields
+                document.getElementById('addUserForm').reset();
+
+                // Switch to "All User" view
+                showAllUsers();
+            })
+            .catch(error => console.error('Error adding user:', error));
+        };
+
+        // Function to handle editing a user
+        function openEditBox(userId) {
+            fetch(`https://dummyjson.com/users/${userId}`)
+                .then(res => res.json())
+                .then(user => {
+                    const editBox = document.getElementById('customEditBox');
+                    editBox.style.display = 'block';
+
+                    document.getElementById('editImage').value = user.image;
+                    document.getElementById('editFirstName').value = user.firstName;
+                    document.getElementById('editLastName').value = user.lastName;
+                    document.getElementById('editPhone').value = user.phone;
+                    document.getElementById('editEmail').value = user.email;
+                    document.getElementById('editAddress').value = user.address.address;
+                    document.getElementById('editBirthDate').value = user.birthDate;
+                    document.getElementById('editGender').value = user.gender;
+                    document.getElementById('editAge').value = user.age;
+
+                    document.getElementById('saveEdit').onclick = function() {
+                        const updatedUser = {
+                            image: document.getElementById('editImage').value,
+                            firstName: document.getElementById('editFirstName').value,
+                            lastName: document.getElementById('editLastName').value,
+                            phone: document.getElementById('editPhone').value,
+                            email: document.getElementById('editEmail').value,
+                            address: {
+                                address: document.getElementById('editAddress').value
+                            },
+                            birthDate: document.getElementById('editBirthDate').value,
+                            gender: document.getElementById('editGender').value,
+                            age: document.getElementById('editAge').value
+                        };
+
+                        fetch(`https://dummyjson.com/users/${user.id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(updatedUser)
+                        })
+                        .then(res => res.json())
+                        .then(updatedUserData => {
+                            const userCard = document.querySelector(`[data-user-id="${user.id}"]`);
+                            if (userCard) {
+                                userCard.querySelector('img').src = updatedUserData.image;
+                                userCard.querySelector('.user-name').textContent = `${updatedUserData.firstName} ${updatedUserData.lastName}`;
+                                userCard.querySelector('.user-phone').textContent = updatedUserData.phone;
+                                userCard.querySelector('.user-email').textContent = updatedUserData.email;
+                                userCard.querySelector('.user-address').textContent = updatedUserData.address.address;
+                                userCard.querySelector('.user-birthDate').textContent = updatedUserData.birthDate;
+                                userCard.querySelector('.user-gender').textContent = `Gender: ${updatedUserData.gender}`;
+                                userCard.querySelector('.user-age').textContent = `Age: ${updatedUserData.age}`;
+                            }
+
+                            const Box1 = document.getElementsByClassName('SaveBox')[0];
+                            if (Box1) {
+                                Box1.style.display = 'block';
+                                setTimeout(() => {
+                                    Box1.style.display = 'none';
+                                }, 2000);
+                            }
+
+                            editBox.style.display = 'none';
+                        })
+                        .catch(error => console.error('Error updating user:', error));
+                    };
+
+                    document.getElementById('cancelEdit').onclick = function() {
+                        editBox.style.display = 'none';
+                    };
+                });
+        }
+
+        // Function to handle deleting a user
+        function openConfirmBox(userId) {
+            const confirmBox = document.getElementById('customConfirmBox');
+            confirmBox.style.display = 'block';
+
+            document.getElementById('confirmDelete').onclick = function() {
+                fetch(`https://dummyjson.com/users/${userId}`, {
+                    method: 'DELETE',
+                })
+                .then(res => res.json())
+                .then(() => {
+                    const userCard = document.querySelector(`[data-user-id="${userId}"]`);
+                    if (userCard) {
+                        userCard.remove();
+                    }
+                    
+                    const Box2 = document.getElementsByClassName('DeletealretBox')[0];
+                    if (Box2) {
+                        Box2.style.display = 'block';
+                        setTimeout(() => {
+                            Box2.style.display = 'none';
+                        }, 2000);
+                    }
+
+                    confirmBox.style.display = 'none';
+                })
+                .catch(error => console.error('Error deleting user:', error));
+            };
+
+            document.getElementById('cancelDelete').onclick = function() {
+                confirmBox.style.display = 'none';
+            };
+        }
+        function logout() {
+            alert('Logged out');
+        }
+        showAllUsers();
+    </script>
+</body>
+</html>
