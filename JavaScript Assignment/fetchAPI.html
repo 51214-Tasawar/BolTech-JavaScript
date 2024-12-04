@@ -205,16 +205,16 @@ function openEditBox(userId) {
         .then(user => {
             const editBox = document.getElementById('customEditBox');
             editBox.style.display = 'block';
-            // // Populate the form fields with the current user data
-            // document.getElementById('editImage').value = user.image;
-            // document.getElementById('editFirstName').value = user.firstName;
-            // document.getElementById('editLastName').value = user.lastName;
-            // document.getElementById('editPhone').value = user.phone;
-            // document.getElementById('editEmail').value = user.email;
-            // document.getElementById('editAddress').value = user.address.address;
-            // document.getElementById('editBirthDate').value = user.birthDate;
-            // document.getElementById('editGender').value = user.gender;
-            // document.getElementById('editAge').value = user.age;
+            // Populate the form fields with the current user data
+            document.getElementById('editImage').value = user.image;
+            document.getElementById('editFirstName').value = user.firstName;
+            document.getElementById('editLastName').value = user.lastName;
+            document.getElementById('editPhone').value = user.phone;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('editAddress').value = user.address.address;
+            document.getElementById('editBirthDate').value = user.birthDate;
+            document.getElementById('editGender').value = user.gender;
+            document.getElementById('editAge').value = user.age;
 
             // Set the save button's onclick event to update the user data
             document.getElementById('saveEdit').onclick = function() {
