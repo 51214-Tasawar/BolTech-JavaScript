@@ -219,19 +219,19 @@ function openEditBox(userId) {
             // Set the save button's onclick event to update the user data
             document.getElementById('saveEdit').onclick = function() {
                 // Create an object with the updated user data
-                const updatedUser = {
-                    image: document.getElementById('editImage').value,
-                    firstName: document.getElementById('editFirstName').value,
-                    lastName: document.getElementById('editLastName').value,
-                    phone: document.getElementById('editPhone').value,
-                    email: document.getElementById('editEmail').value,
-                    address: {
-                        address: document.getElementById('editAddress').value
-                    },
-                    birthDate: document.getElementById('editBirthDate').value,
-                    gender: document.getElementById('editGender').value,
-                    age: document.getElementById('editAge').value
-                };
+                // const updatedUser = {
+                //     image: document.getElementById('editImage').value,
+                //     firstName: document.getElementById('editFirstName').value,
+                //     lastName: document.getElementById('editLastName').value,
+                //     phone: document.getElementById('editPhone').value,
+                //     email: document.getElementById('editEmail').value,
+                //     address: {
+                //         address: document.getElementById('editAddress').value
+                //     },
+                //     birthDate: document.getElementById('editBirthDate').value,
+                //     gender: document.getElementById('editGender').value,
+                //     age: document.getElementById('editAge').value
+                // };
 
                 // Send a PUT request to update the user on the server
                 fetch(`https://dummyjson.com/users/${user.id}`, {
